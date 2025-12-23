@@ -1,0 +1,323 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Paleta actualizada para coincidir exactamente con weareexample.com */
+  --background: oklch(1 0 0); /* blanco puro */
+  --foreground: oklch(0.05 0 0); /* negro intenso */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.05 0 0);
+  --popover: oklch(0.96 0 0); /* gris muy claro para popup */
+  --popover-foreground: oklch(0.05 0 0);
+  --primary: oklch(0.05 0 0);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.96 0 0);
+  --secondary-foreground: oklch(0.05 0 0);
+  --muted: oklch(0.93 0 0);
+  --muted-foreground: oklch(0.5 0 0);
+  --accent: oklch(0.05 0 0);
+  --accent-foreground: oklch(1 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.88 0 0);
+  --input: oklch(0.88 0 0);
+  --ring: oklch(0.05 0 0);
+  --chart-1: oklch(0.05 0 0);
+  --chart-2: oklch(0.3 0 0);
+  --chart-3: oklch(0.5 0 0);
+  --chart-4: oklch(0.7 0 0);
+  --chart-5: oklch(0.9 0 0);
+  --radius: 0rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.05 0 0);
+  --sidebar-primary: oklch(0.05 0 0);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.05 0 0);
+  --sidebar-border: oklch(0.88 0 0);
+  --sidebar-ring: oklch(0.05 0 0);
+}
+
+.dark {
+  --background: oklch(0.05 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.1 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.05 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.05 0 0);
+  --secondary: oklch(0.2 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.25 0 0);
+  --muted-foreground: oklch(0.6 0 0);
+  --accent: oklch(0.985 0 0);
+  --accent-foreground: oklch(0.05 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.25 0 0);
+  --input: oklch(0.25 0 0);
+  --ring: oklch(0.985 0 0);
+  --chart-1: oklch(0.9 0 0);
+  --chart-2: oklch(0.7 0 0);
+  --chart-3: oklch(0.5 0 0);
+  --chart-4: oklch(0.3 0 0);
+  --chart-5: oklch(0.05 0 0);
+  --sidebar: oklch(0.15 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.985 0 0);
+  --sidebar-primary-foreground: oklch(0.05 0 0);
+  --sidebar-accent: oklch(0.25 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.25 0 0);
+  --sidebar-ring: oklch(0.985 0 0);
+}
+
+@theme inline {
+  --font-sans: var(--font-inter), "Geist", "Geist Fallback";
+  --font-mono: "Geist Mono", "Geist Mono Fallback";
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    scroll-behavior: smooth;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Custom scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/20 rounded-full;
+    transition: background-color 0.2s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/40;
+  }
+
+  /* Better focus states for accessibility */
+  :focus-visible {
+    outline: 2px solid oklch(0.05 0 0);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+
+  /* Remove focus outline for mouse users */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* Enhanced selection colors */
+  ::selection {
+    background-color: oklch(0.05 0 0);
+    color: oklch(1 0 0);
+  }
+
+  /* Disable cursor on touch devices */
+  @media (pointer: coarse) {
+    body {
+      cursor: auto !important;
+    }
+    body.touch {
+      cursor: auto !important;
+    }
+  }
+
+  /* Hide scrollbar on mobile for cleaner look */
+  @media (max-width: 768px) {
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
+/* ============================================
+   CUSTOM ANIMATIONS - PREMIUM WEBSITE STYLE
+   Inspired by modern agency websites like weareexample.com
+   ============================================ */
+
+/* Smooth marquee animation for background text */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 25s linear infinite;
+  will-change: transform;
+}
+
+/* Fade in from bottom with smooth easing */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Text reveal animation - letters appear one by one */
+@keyframes textReveal {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-text-reveal {
+  animation: textReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Smooth scale on scroll/view */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scale-in {
+  animation: scaleIn 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Stagger children animation delays */
+.stagger-children > * {
+  animation-delay: calc(var(--stagger-delay, 0.1s) * var(--stagger-index, 0));
+}
+
+/* Smooth image hover zoom */
+.hover-zoom-image {
+  overflow: hidden;
+}
+
+.hover-zoom-image img {
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.hover-zoom-image:hover img {
+  transform: scale(1.08);
+}
+
+/* Premium link underline effect */
+.link-underline {
+  position: relative;
+  display: inline-block;
+}
+
+.link-underline::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.link-underline:hover::after {
+  width: 100%;
+}
+
+/* Smooth parallax effect */
+@keyframes parallaxFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-parallax-float {
+  animation: parallaxFloat 6s ease-in-out infinite;
+}
+
+/* Page transition fade */
+@keyframes pageTransition {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-transition {
+  animation: pageTransition 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
