@@ -4,234 +4,141 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import { useLanguage } from "@/hooks/use-language"
+import { ArrowUpRight } from "lucide-react"
+import { TextReveal } from "@/components/ui/TextReveal"
+import { SectionMarker, TechTag, Crosshair } from "@/components/ui/TechnicalDecor"
 
+/**
+ * AboutPage Component
+ * Redesigned with a "Creative Manual" aesthetic.
+ * Now fully modular using the translation dictionary.
+ */
 export default function AboutPage() {
-  const { lang } = useLanguage()
+  const { t } = useLanguage()
 
-  const sections = [
-    {
-      title: lang === "en" ? "We Create" : "Creamos",
-      subtitle: lang === "en" ? "Brand moments that earn attention." : "Momentos de marca que captan la atención.",
-      description:
-        lang === "en"
-          ? "People won't take notice unless you give them a genuine reason to. From identity to campaigns, we cut through the noise with purpose—earning brands cultural relevance and lasting, authentic engagement."
-          : "La gente no prestará atención a menos que les des una razón genuina. Desde identidad hasta campañas, cortamos el ruido con propósito, ganando relevancia cultural y compromiso auténtico duradero.",
-      image: "/creative-team-collaboration.png",
-      categories: ["Brand Identity", "PR-Led Ideas", "Social-Led Campaigns", "Creative & Content Development"],
-    },
-    {
-      title: lang === "en" ? "We Design" : "Diseñamos",
-      subtitle:
-        lang === "en"
-          ? "Places that draw people in & keep them coming back."
-          : "Lugares que atraen a la gente y los hacen volver.",
-      description:
-        lang === "en"
-          ? "Venues that make an impact have a story to tell. From hotels, to restaurants, to retail—we use our placemaking and branding expertise to craft places and experiences that stay with people."
-          : "Los lugares que tienen impacto tienen una historia que contar. Desde hoteles hasta restaurantes y retail, usamos nuestra experiencia en placemaking y branding para crear lugares y experiencias memorables.",
-      image: "/design-brainstorming.jpg",
-      categories: [
-        "Hotels",
-        "Bars",
-        "Restaurants",
-        "Retail",
-        "Mixed-Use Property",
-        "Hospitality Concepts",
-        "Placemaking",
-        "Branding",
-      ],
-    },
-    {
-      title: lang === "en" ? "We Shape" : "Moldeamos",
-      subtitle:
-        lang === "en"
-          ? "Place culture that keeps destinations relevant."
-          : "Cultura de lugares que mantiene los destinos relevantes.",
-      description:
-        lang === "en"
-          ? "Places that last offer more than just a service. We shape the culture of destinations, going beyond what's expected to create venues that truly mean something to their people and community."
-          : "Los lugares que perduran ofrecen más que un servicio. Moldeamos la cultura de los destinos, yendo más allá de lo esperado para crear lugares que realmente significan algo para su gente y comunidad.",
-      image: "/brand-strategy-meeting.png",
-      categories: [
-        "Cultural Place Strategy",
-        "Precinct Positioning",
-        "Art & Music Curation",
-        "Community Integration",
-        "Seasonal & Cultural Activations",
-      ],
-    },
-    {
-      title: lang === "en" ? "We Amplify" : "Amplificamos",
-      subtitle:
-        lang === "en"
-          ? "Brands through experiences that drive influence and demand."
-          : "Marcas a través de experiencias que impulsan influencia y demanda.",
-      description:
-        lang === "en"
-          ? "Brands at the top of their game don't just follow culture, but define it. From PR, to sponsorships, to activations, our uniquely creative way of doing things takes brands to the forefront of their industry."
-          : "Las marcas en la cima no solo siguen la cultura, sino que la definen. Desde PR hasta patrocinios y activaciones, nuestra forma única y creativa lleva a las marcas al frente de su industria.",
-      image: "/creative-workspace.png",
-      categories: [
-        "Public Relations",
-        "Social",
-        "Live Events",
-        "Collaborations",
-        "Media Partnerships",
-        "Community Building",
-        "Influencer & Creator",
-      ],
-    },
-  ]
+  const sections = t.about.sections.map((section, index) => ({
+    ...section,
+    image: index === 0 ? "/creative-team-collaboration.png" : index === 1 ? "/design-brainstorming.jpg" : "/brand-strategy-meeting.png",
+    coord: index === 0 ? "40.7128° N, 74.0060° W" : index === 1 ? "34.0522° N, 118.2437° W" : "51.5074° N, 0.1278° W"
+  }))
 
   return (
-    <main className="bg-white pt-24">
+    <main className="bg-white pt-32 pb-24 overflow-hidden">
+      <div className="fixed inset-0 pointer-events-none z-0 opacity-[0.03]" 
+           style={{ backgroundImage: 'linear-gradient(to right, #000 1px, transparent 1px), linear-gradient(to bottom, #000 1px, transparent 1px)', backgroundSize: '40px 40px' }} 
+      />
+
       {/* Hero section */}
-      <section className="py-24 lg:py-32">
+      <section className="relative z-10 py-24 mb-32">
         <div className="container mx-auto px-6 lg:px-8">
-          <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} className="text-center">
-            <p className="mb-4 text-xs font-bold uppercase tracking-wider text-neutral-500">Founded in 2017</p>
-            <h1 className="mb-8 text-5xl font-black leading-tight md:text-6xl lg:text-7xl">
-              {lang === "en"
-                ? "An independently owned earned-led culture agency"
-                : "Una agencia de cultura independiente enfocada en resultados ganados"}
-            </h1>
-            <p className="text-2xl font-bold mb-4">
-              {lang === "en" ? "We Create and Amplify" : "Creamos y Amplificamos"}
-            </p>
-            <p className="text-base text-neutral-600">
-              {lang === "en"
-                ? "the world's most-talked about brands, destinations and experiences"
-                : "las marcas, destinos y experiencias más comentadas del mundo"}
-            </p>
-          </motion.div>
-        </div>
-      </section>
+          <div className="max-w-5xl mx-auto">
+            <div className="flex items-center gap-6 mb-12">
+              <TechTag label="Foundation" value={t.about.hero.foundation} />
+              <div className="h-[1px] flex-grow bg-neutral-100" />
+              <TechTag label="Classification" value={t.about.hero.classification} />
+            </div>
 
-      {/* Stats and description section */}
-      <section className="py-16 border-t border-neutral-200">
-        <div className="container mx-auto px-6 lg:px-8">
-          <div className="grid gap-16 lg:grid-cols-2">
-            {/* Left: Image */}
-            <motion.div
-              initial={{ opacity: 0, x: -40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="relative h-96 lg:h-full"
+            <motion.h1 
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              className="mb-12 text-6xl md:text-8xl lg:text-9xl font-a font-black leading-[0.85] tracking-tighter"
             >
-              <Image src="/agency-team-collaboration.jpg" alt="Fanger team" fill className="object-cover" />
-            </motion.div>
+              <span className="block">{t.about.hero.title1}</span>
+              <span className="block text-neutral-300">{t.about.hero.title2}</span>
+            </motion.h1>
 
-            {/* Right: Text */}
-            <motion.div
-              initial={{ opacity: 0, x: 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="flex flex-col justify-center"
-            >
-              <h3 className="text-2xl font-bold mb-6">
-                {lang === "en"
-                  ? "Fanger is the premier name in earned-led culture."
-                  : "Fanger es el nombre principal en cultura basada en resultados ganados."}
-              </h3>
-              <div className="space-y-4 mb-8 text-neutral-700">
-                <p>We move fast and think ahead.</p>
-                <p>We partner with brands to find deeper meaning.</p>
-                <p>We're connected in all the right places.</p>
-                <p>We don't wait for the brief, we help shape it.</p>
-                <p>
-                  Backed by strategy, driven by creativity, and powered by people who've led some of the biggest
-                  cultural moments in the country.
-                </p>
-                <p>We set the best example.</p>
-                <p>We make brands impossible to forget.</p>
+            <div className="grid md:grid-cols-2 gap-12 items-end">
+              <div className="font-c text-[10px] uppercase tracking-[0.2em] leading-relaxed text-neutral-500 max-w-sm">
+                {t.about.hero.report}
+                <br />
+                {t.about.hero.reportText}
               </div>
-
-              {/* Stats */}
-              <div className="grid grid-cols-2 gap-6">
-                <div>
-                  <p className="text-4xl font-black mb-1">500+</p>
-                  <p className="text-sm text-neutral-600">projects in over five countries</p>
-                </div>
-                <div>
-                  <p className="text-4xl font-black mb-1">100+</p>
-                  <p className="text-sm text-neutral-600">venues launched</p>
-                </div>
-                <div>
-                  <p className="text-4xl font-black mb-1">50+</p>
-                  <p className="text-sm text-neutral-600">placemaking and design projects</p>
-                </div>
-                <div>
-                  <p className="text-4xl font-black mb-1">20+</p>
-                  <p className="text-sm text-neutral-600">years of industry-leading expertise</p>
-                </div>
-              </div>
-
-              <Link
-                href="/what-we-do"
-                className="mt-8 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider hover:opacity-60 transition-opacity"
-              >
-                What we do →
-              </Link>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* We Create / Design / Shape / Amplify sections */}
-      {sections.map((section, index) => (
-        <section key={section.title} className="py-24 lg:py-32 border-t border-neutral-200">
-          <div className="container mx-auto px-6 lg:px-8">
-            <div className="grid gap-16 lg:grid-cols-2 lg:gap-24">
-              {/* Left side - sticky */}
-              <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="lg:sticky lg:top-32 lg:self-start"
-              >
-                <p className="mb-4 text-xs font-bold uppercase tracking-wider text-neutral-500">0{index + 1}</p>
-                <h2 className="mb-6 text-5xl font-black lg:text-6xl">{section.title}</h2>
-                <h3 className="mb-6 text-2xl font-bold">{section.subtitle}</h3>
-                <p className="mb-8 text-neutral-700">{section.description}</p>
-                <Link
-                  href="/what-we-do"
-                  className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider hover:opacity-60 transition-opacity"
-                >
-                  What we do →
-                </Link>
-              </motion.div>
-
-              {/* Right side - scrolls */}
-              <div className="space-y-12">
-                {/* Image */}
-                <motion.div
-                  initial={{ opacity: 0, y: 60 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="relative h-96 lg:h-[600px]"
-                >
-                  <Image src={section.image || "/placeholder.svg"} alt={section.title} fill className="object-cover" />
-                </motion.div>
-
-                {/* Categories */}
-                <motion.div
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="space-y-4"
-                >
-                  {section.categories.map((category, i) => (
-                    <div key={category} className="flex items-center gap-4">
-                      <span className="text-sm text-neutral-400">{String(i + 1).padStart(2, "0")}</span>
-                      <p className="text-lg font-normal">{category}</p>
-                    </div>
-                  ))}
-                </motion.div>
+              <div className="text-xl md:text-2xl font-b font-medium leading-relaxed">
+                <TextReveal text={t.about.hero.reveal} />
               </div>
             </div>
           </div>
-        </section>
-      ))}
+        </div>
+      </section>
+
+      {/* Chapters / Sections */}
+      <div className="relative z-10 space-y-48">
+        {sections.map((section, index) => (
+          <section 
+            key={section.id} 
+            id={section.id === "01" ? "we-create" : section.id === "02" ? "we-design" : "we-shape"}
+            className="container mx-auto px-6 lg:px-8"
+          >
+            <SectionMarker number={section.id} title={section.title} />
+            
+            <div className="grid lg:grid-cols-12 gap-16 items-start">
+              {/* Left Column: Image & Technical Specs */}
+              <div className="lg:col-span-5 space-y-12">
+                <motion.div 
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  className="relative aspect-[4/5] overflow-hidden grayscale hover:grayscale-0 transition-all duration-700"
+                >
+                  <Image src={section.image || "/placeholder.svg"} alt={section.title} fill className="object-cover" />
+                  <div className="absolute top-4 left-4"><Crosshair /></div>
+                  <div className="absolute bottom-4 right-4"><Crosshair /></div>
+                </motion.div>
+
+                <div className="flex justify-between border-t border-neutral-100 pt-8">
+                  <TechTag label="Location Coordinates" value={section.coord} />
+                  <TechTag label="Ref_Status" value="PROCESSED // OK" />
+                </div>
+              </div>
+
+              {/* Right Column: Content & Reveal */}
+              <div className="lg:col-span-7 lg:pl-12">
+                <h3 className="text-3xl md:text-5xl font-a font-black mb-8 leading-tight uppercase tracking-tight">
+                  {section.subtitle}
+                </h3>
+                
+                <div className="text-lg md:text-2xl font-b text-neutral-600 mb-12">
+                  <TextReveal text={section.description} />
+                </div>
+
+                <div className="grid grid-cols-2 gap-x-8 gap-y-4">
+                  {section.categories.map((cat, i) => (
+                    <div key={cat} className="flex items-center gap-3 py-3 border-b border-neutral-100">
+                      <span className="font-c text-[10px] text-neutral-300">0{i+1}</span>
+                      <span className="font-c text-[10px] uppercase tracking-wider font-bold">{cat}</span>
+                    </div>
+                  ))}
+                </div>
+                
+                <Link 
+                  href="/what-we-do"
+                  data-cursor-text="Learn More"
+                  className="inline-flex mt-12 items-center gap-4 py-1 link-premium-arrow text-black font-c text-[10px] uppercase tracking-widest transition-colors"
+                >
+                  <span>{t.about.cta}</span>
+                  <ArrowUpRight className="w-5 h-5" />
+                </Link>
+              </div>
+            </div>
+          </section>
+        ))}
+      </div>
+
+      {/* Stats Section */}
+      <section className="container mx-auto px-6 lg:px-8 mt-64 border-t-2 border-black pt-24">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
+          {t.about.stats.map((stat, i) => (
+            <div key={i} className="space-y-4">
+                <p className="font-c text-[9px] uppercase tracking-widest text-neutral-400">{stat.label}</p>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-5xl md:text-7xl font-a font-black">{stat.value}</span>
+                  <span className="text-[10px] font-c uppercase font-bold opacity-30">{stat.sub}</span>
+                </div>
+            </div>
+          ))}
+        </div>
+      </section>
     </main>
   )
 }

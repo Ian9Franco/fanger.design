@@ -38,6 +38,12 @@
   --sidebar-accent-foreground: oklch(0.05 0 0);
   --sidebar-border: oklch(0.88 0 0);
   --sidebar-ring: oklch(0.05 0 0);
+  
+  /* Modular Typography */
+  --font-a: var(--font-space-grotesk);
+  --font-b: var(--font-inter);
+  --font-c: var(--font-mono);
+  --font-d: var(--font-serif);
 }
 
 .dark {
@@ -76,8 +82,14 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-inter), "Geist", "Geist Fallback";
-  --font-mono: "Geist Mono", "Geist Mono Fallback";
+  --font-a: var(--font-a);
+  --font-b: var(--font-b);
+  --font-c: var(--font-c);
+  --font-d: var(--font-d);
+  --font-sans: var(--font-b);
+  --font-mono: var(--font-c);
+  --font-serif: var(--font-d);
+  --font-display: var(--font-a);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -291,6 +303,108 @@
   width: 100%;
 }
 
+/* Premium Link with traveling underline (Left to Right) */
+.link-premium {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+  padding: 0.2em 0;
+}
+
+.link-premium::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: translateX(-101%);
+  transition: transform 0.6s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.link-premium:hover::after {
+  transform: translateX(0);
+}
+
+/* Traveling Line that comes from one side and leaves to the other */
+.link-travel {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.link-travel::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: translateX(-100%);
+  transition: transform 0.6s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.link-travel:hover::after {
+  transform: translateX(0);
+}
+
+/* Link with Arrow that travels on hover (weareexample style) */
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  position: relative;
+  overflow: hidden;
+}
+
+.link-arrow .arrow-icon {
+  transition: transform 0.6s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.link-arrow:hover .arrow-icon {
+  transform: translate(3px, -3px);
+}
+
+/* Combined Underline + Arrow Travel */
+.link-premium-arrow {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding-bottom: 2px;
+}
+
+.link-premium-arrow::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.6s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.link-premium-arrow:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.link-premium-arrow svg,
+.hover-arrow svg {
+  transition: transform 0.6s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.link-premium-arrow:hover svg,
+.hover-arrow:hover svg {
+  transform: translate(2px, -2px);
+}
+
 /* Smooth parallax effect */
 @keyframes parallaxFloat {
   0%,
@@ -320,4 +434,82 @@
 
 .page-transition {
   animation: pageTransition 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* ============================================
+   TECHNICAL MANUAL STYLES
+   Inspired by creativewebmanual.com
+   ============================================ */
+
+/* Technical background with dots */
+.bg-grid-dots {
+  background-image: radial-gradient(
+    circle,
+    var(--foreground) 1px,
+    transparent 1px
+  );
+  background-size: 30px 30px;
+}
+
+/* Technical background with lines */
+.bg-grid-lines {
+  background-image: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.05) 1px,
+      transparent 1px
+    ),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Sharp technical borders */
+.border-manual {
+  border: 1px solid var(--foreground);
+  position: relative;
+}
+
+.border-manual::before,
+.border-manual::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+}
+
+/* Top left corner bracket */
+.corner-bracket-tl {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  border-top: 2px solid var(--foreground);
+  border-left: 2px solid var(--foreground);
+  width: 12px;
+  height: 12px;
+}
+
+/* Bottom right corner bracket */
+.corner-bracket-br {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 2px solid var(--foreground);
+  border-right: 2px solid var(--foreground);
+  width: 12px;
+  height: 12px;
+}
+
+/* Mono labels */
+.label-mono {
+  @apply font-mono text-[10px] uppercase tracking-[0.3em] font-bold;
+}
+
+/* Smooth text reveal mask */
+.text-reveal-mask {
+  mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+  mask-size: 100% 200%;
+  mask-position: 0% 100%;
+  transition: mask-position 0.6s ease;
+}
+
+.text-reveal-mask:hover {
+  mask-position: 0% 0%;
 }

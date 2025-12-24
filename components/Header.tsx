@@ -4,84 +4,65 @@ import Link from "next/link"
 import { useState } from "react"
 import { useLanguage } from "@/hooks/use-language"
 import { LanguageToggle } from "./LanguageToggle"
+import { Logo } from "./ui/Logo"
 import { X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
 export function Header() {
-  const { t, lang } = useLanguage()
+  const { t } = useLanguage()
   const [menuOpen, setMenuOpen] = useState(false)
-
-  // Logo como letras individuales - FANGER
-  const logoLetters = ["F", "A", "N", "G", "E", "R"]
-
-  // Menu items for "What We Do" popup
-  const whatWeDoCategories = {
-    whoWeHelp: ["Travel & Hotels", "Consumer Brands", "Property", "Entertainment", "Hospitality"],
-    whatWeDo: ["Strategy", "Branding", "Placemaking", "Place Culture", "PR", "Social", "Marketing", "Content"],
-  }
 
   return (
     <>
       {/* Header fijo */}
-      <header className="fixed left-0 right-0 top-0 z-50 bg-white/95 backdrop-blur-md border-b border-border/40 transition-all">
-        <nav className="container mx-auto flex items-center justify-between px-6 py-5 lg:px-8">
+      <header className="fixed left-0 right-0 top-0 z-50 bg-white border-b border-black/5 transition-all">
+        <nav className="container mx-auto flex items-center justify-between px-6 py-4 lg:px-8">
+          
           {/* Logo - Left Side */}
-          <Link href="/" className="flex items-center gap-0 group">
-            {logoLetters.map((letter, i) => (
-              <motion.span
-                key={i}
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05, duration: 0.4 }}
-                className="text-2xl font-black text-black transition-all duration-300 group-hover:tracking-wide"
-              >
-                {letter}
-              </motion.span>
-            ))}
-          </Link>
+          <Logo />
 
           {/* Desktop Navigation - CENTERED */}
-          <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2">
-            <ul className="flex items-center gap-8">
+          <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 items-center">
+            <ul className="flex items-center gap-10">
               <li>
                 <Link 
                   href="/" 
-                  className="relative text-sm font-medium transition-opacity hover:opacity-100 opacity-70 link-underline"
+                  className="font-b text-[11px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100 opacity-60 relative group link-travel pb-1 h-8 flex items-center"
                 >
-                  Home
+                  {t.header.home}
                 </Link>
               </li>
               <li>
                 <Link 
                   href="/about" 
-                  className="relative text-sm font-medium transition-opacity hover:opacity-100 opacity-70 link-underline"
+                  className="font-b text-[11px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100 opacity-60 relative group link-travel pb-1 h-8 flex items-center"
                 >
-                  About
+                  {t.header.about}
                 </Link>
               </li>
               <li>
                 <button
                   onClick={() => setMenuOpen(!menuOpen)}
-                  className="relative text-sm font-medium transition-opacity hover:opacity-100 opacity-70 link-underline"
+                  className="font-b text-[11px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100 opacity-60 relative group link-travel pb-1 h-8 flex items-center p-0 m-0 border-none bg-transparent appearance-none cursor-pointer"
                 >
-                  What We Do
+                  {t.header.whatWeDo}
                 </button>
               </li>
             </ul>
           </div>
 
           {/* Right Side - Email (Desktop) + Language */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-12">
             <a 
-              href="mailto:hello@fanger.design" 
-              className="text-xs font-bold uppercase tracking-wider hover:opacity-70 transition-opacity"
+              href={`mailto:${t.header.hello}`} 
+              className="font-c text-[10px] font-bold uppercase tracking-widest hover:opacity-50 transition-opacity link-travel pb-1 flex-shrink-0 whitespace-nowrap"
             >
-              HELLO@FANGER.DESIGN
+              {t.header.hello}
             </a>
             <LanguageToggle />
           </div>
 
-          {/* Mobile menu button - Animated 2-line Hamburger */}
+          {/* Mobile menu button */}
           <div className="flex items-center gap-4 md:hidden">
             <LanguageToggle />
             <button 
@@ -104,7 +85,7 @@ export function Header() {
         </nav>
       </header>
 
-      {/* "What We Do" popup overlay - full screen BLACK background */}
+      {/* "What We Do" popup overlay */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -112,21 +93,21 @@ export function Header() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-50 bg-black"
+            className="fixed inset-0 z-50 bg-black selection:bg-white selection:text-black"
           >
             <div className="container mx-auto px-6 lg:px-8 h-full flex flex-col">
-              {/* Close button - Hidden on mobile, X is in header */}
+              {/* Close button - Desktop */}
               <motion.div 
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="hidden md:flex justify-end py-6"
+                className="hidden md:flex justify-end py-8"
               >
                 <button
                   onClick={() => setMenuOpen(false)}
-                  className="text-sm font-medium hover:opacity-100 opacity-70 transition-all flex items-center gap-2 group text-white"
+                  className="text-white font-c text-[10px] uppercase tracking-[0.3em] flex items-center gap-3 group"
                 >
-                  <span className="link-underline">CLOSE</span>
+                  <span className="opacity-50 group-hover:opacity-100 transition-opacity">{t.header.menu.close}</span>
                   <X className="h-4 w-4 transition-transform group-hover:rotate-90" />
                 </button>
               </motion.div>
@@ -134,165 +115,100 @@ export function Header() {
               {/* Menu content */}
               <div className="flex-1 flex items-center justify-center">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-20 lg:gap-32 w-full max-w-6xl">
-                  {/* Mobile: Single column centered links */}
-                  <div className="md:hidden text-center space-y-8">
-                    <motion.div
-                      initial={{ opacity: 0, y: 40 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2 }}
-                    >
-                      <Link
-                        href="/"
-                        onClick={() => setMenuOpen(false)}
-                        className="block text-5xl font-black text-white hover:opacity-70 transition-opacity"
-                      >
-                        HOME
-                      </Link>
+                  {/* Mobile Links */}
+                  <div className="md:hidden text-center space-y-10">
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+                      <Link href="/" onClick={() => setMenuOpen(false)} className="block text-4xl font-a font-black text-white">{t.header.home}</Link>
                     </motion.div>
-                    <motion.div
-                      initial={{ opacity: 0, y: 40 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.3 }}
-                    >
-                      <Link
-                        href="/about"
-                        onClick={() => setMenuOpen(false)}
-                        className="block text-5xl font-black text-white hover:opacity-70 transition-opacity"
-                      >
-                        ABOUT
-                      </Link>
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+                      <Link href="/about" onClick={() => setMenuOpen(false)} className="block text-4xl font-a font-black text-white">{t.header.about}</Link>
                     </motion.div>
-                    <motion.div
-                      initial={{ opacity: 0, y: 40 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.4 }}
-                    >
-                      <Link
-                        href="/what-we-do"
-                        onClick={() => setMenuOpen(false)}
-                        className="block text-5xl font-black text-white hover:opacity-70 transition-opacity"
-                      >
-                        WHAT WE DO
-                      </Link>
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+                      <Link href="/#what-we-do" onClick={() => setMenuOpen(false)} className="block text-4xl font-a font-black text-white">{t.header.whatWeDo}</Link>
                     </motion.div>
                   </div>
-                  {/* Who We Help - Desktop only */}
+
+                  {/* Who We Help - Desktop */}
                   <motion.div
-                    initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
-                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, y: -40, filter: "blur(10px)" }}
-                    transition={{ delay: 0.15, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.2, duration: 0.6 }}
                     className="hidden md:block"
                   >
-                    <h3 className="text-xs font-bold uppercase tracking-[0.3em] mb-10 text-neutral-400">WHO WE HELP</h3>
-                    <ul className="space-y-5">
-                      {whatWeDoCategories.whoWeHelp.map((item, i) => (
-                        <motion.li
-                          key={item}
-                          initial={{ opacity: 0, x: -30, filter: "blur(8px)" }}
-                          animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                          transition={{ 
-                            delay: 0.25 + i * 0.06, 
-                            duration: 0.5,
-                            ease: [0.22, 1, 0.36, 1]
-                          }}
-                        >
-                          <Link
-                            href="#"
-                            onClick={() => setMenuOpen(false)}
-                            className="group text-3xl lg:text-4xl font-medium hover:opacity-100 opacity-80 transition-all flex items-center gap-3 text-white"
+                    <h3 className="font-c text-[10px] font-bold uppercase tracking-[0.4em] mb-12 text-white/30">{t.header.menu.whoWeHelp}</h3>
+                    <ul className="space-y-6">
+                      {t.header.menu.helpItems.map((item, i) => {
+                        const hrefs = ["/#travel", "/#luxury", "/#islands", "/#islands", "/#islands"];
+                        return (
+                          <motion.li
+                            key={item}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.3 + i * 0.05 }}
                           >
-                            <span className="inline-block transition-transform group-hover:translate-x-2">↳</span>
-                            <span className="link-underline">{item}</span>
-                          </Link>
-                        </motion.li>
-                      ))}
+                            <Link href={hrefs[i] || "#"} onClick={() => setMenuOpen(false)} className="group text-4xl lg:text-5xl font-a font-bold text-white/80 hover:text-white transition-all flex items-center gap-4 link-travel pb-2">
+                              <span className="font-c text-[10px] opacity-20 group-hover:opacity-100 transition-opacity">0{i+1}</span>
+                              <span>{item}</span>
+                            </Link>
+                          </motion.li>
+                        )
+                      })}
                     </ul>
                   </motion.div>
 
-                  {/* What We Do - Desktop only */}
+                  {/* What We Do - Desktop */}
                   <motion.div
-                    initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
-                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, y: -40, filter: "blur(10px)" }}
-                    transition={{ delay: 0.25, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.3, duration: 0.6 }}
                     className="hidden md:block"
                   >
-                    <h3 className="text-xs font-bold uppercase tracking-[0.3em] mb-10 text-neutral-400">WHAT WE DO</h3>
-                    <ul className="space-y-5">
-                      {whatWeDoCategories.whatWeDo.map((item, i) => (
-                        <motion.li
-                          key={item}
-                          initial={{ opacity: 0, x: -30, filter: "blur(8px)" }}
-                          animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                          transition={{ 
-                            delay: 0.35 + i * 0.06,
-                            duration: 0.5,
-                            ease: [0.22, 1, 0.36, 1]
-                          }}
-                        >
-                          <Link
-                            href="#"
-                            onClick={() => setMenuOpen(false)}
-                            className="group text-3xl lg:text-4xl font-medium hover:opacity-100 opacity-80 transition-all flex items-center gap-3 text-white"
+                    <h3 className="font-c text-[10px] font-bold uppercase tracking-[0.4em] mb-12 text-white/30">{t.header.menu.whatWeDo}</h3>
+                    <ul className="space-y-6">
+                      {t.header.menu.doItems.map((item, i) => {
+                         const hrefs = [
+                           "/about#we-create", // Strategy
+                           "/about#we-create", // Branding
+                           "/about#we-design", // Placemaking
+                           "/about#we-shape",  // Place Culture
+                           "/about#we-create", // PR
+                           "/about#we-create", // Social
+                           "/about#we-create", // Marketing
+                           "/about#we-create"  // Content
+                         ];
+                         return (
+                          <motion.li
+                            key={item}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.4 + i * 0.05 }}
                           >
-                            <span className="inline-block transition-transform group-hover:translate-x-2">↳</span>
-                            <span className="link-underline">{item}</span>
-                          </Link>
-                        </motion.li>
-                      ))}
+                            <Link href={hrefs[i] || "#"} onClick={() => setMenuOpen(false)} className="group text-4xl lg:text-5xl font-a font-bold text-white/80 hover:text-white transition-all flex items-center gap-4 link-travel pb-2">
+                              <span className="font-c text-[10px] opacity-20 group-hover:opacity-100 transition-opacity">0{i+1}</span>
+                              <span>{item}</span>
+                            </Link>
+                          </motion.li>
+                         )
+                      })}
                     </ul>
                   </motion.div>
                 </div>
               </div>
 
-              {/* Footer - Email and Social (Mobile) */}
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-                className="md:hidden py-10 text-center space-y-6"
-              >
-                <a 
-                  href="mailto:hello@fanger.design"
-                  className="block text-2xl font-bold text-white hover:opacity-70 transition-opacity"
-                >
-                  HELLO@FANGER.DESIGN
-                </a>
-                <div className="flex items-center justify-center gap-8">
-                  <a
-                    href="https://instagram.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-base font-bold uppercase tracking-wider text-white hover:opacity-70 transition-opacity"
-                  >
-                    INSTAGRAM
-                  </a>
-                  <a
-                    href="https://linkedin.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-base font-bold uppercase tracking-wider text-white hover:opacity-70 transition-opacity"
-                  >
-                    LINKEDIN
-                  </a>
-                </div>
-              </motion.div>
-
-              {/* View All Work link - Desktop only */}
+              {/* View All Work link */}
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8 }}
-                className="hidden md:block py-10 text-center"
+                className="py-12 border-t border-white/5 text-center"
               >
                 <Link
-                  href="#"
+                  href="/#what-we-do"
                   onClick={() => setMenuOpen(false)}
-                  className="group inline-flex items-center gap-2 text-sm font-bold uppercase tracking-[0.3em] hover:opacity-100 opacity-70 transition-all text-white"
+                  className="group inline-flex items-center gap-4 text-[10px] font-c uppercase tracking-[0.4em] text-white/40 hover:text-white transition-colors"
                 >
-                  <span className="inline-block transition-transform group-hover:translate-x-2">↳</span>
-                  <span className="link-underline">VIEW ALL WORK</span>
+                   <span className="inline-block transition-transform group-hover:translate-x-2">↳</span>
+                   {t.header.menu.viewAllWork}
                 </Link>
               </motion.div>
             </div>

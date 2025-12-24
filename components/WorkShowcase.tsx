@@ -17,7 +17,7 @@ export function WorkShowcase() {
         lang === "en"
           ? "We're shaping the next chapter for InterContinental Hayman, story, strategy, and setting."
           : "Damos forma al próximo capítulo de InterContinental Hayman, historia, estrategia y ambiente.",
-      image: "/placeholder-img.png",
+      image: "/brand-strategy-planning-design-thinking.jpg",
       tag: "Coming Soon",
     },
     {
@@ -26,7 +26,7 @@ export function WorkShowcase() {
         lang === "en"
           ? "We are defining the strategy for Addmind's new Dubai Harbour F&B precinct."
           : "Definimos la estrategia para el nuevo distrito de F&B de Addmind en Dubai Harbour.",
-      image: "/placeholder-img.png",
+      image: "/abstract-creative-workspace.jpg",
       tag: "Coming Soon",
     },
     {
@@ -35,7 +35,7 @@ export function WorkShowcase() {
         lang === "en"
           ? "We introduced The Standard to Australia and gave Fitzroy a new cultural hotspot."
           : "Introducimos The Standard a Australia y dimos a Fitzroy un nuevo punto cultural.",
-      image: "/placeholder-img.png",
+      image: "/design-brainstorming.jpg",
       tag: "Coming Soon",
     },
     {
@@ -44,7 +44,7 @@ export function WorkShowcase() {
         lang === "en"
           ? "Leading the experiential concept and PR strategy for Patrón at Dubai's biggest culture festival."
           : "Liderando el concepto experiencial y estrategia de PR para Patrón en el festival cultural más grande de Dubai.",
-      image: "/placeholder-img.png",
+      image: "/creative-team-collaboration.png",
       tag: "Coming Soon",
     },
   ]

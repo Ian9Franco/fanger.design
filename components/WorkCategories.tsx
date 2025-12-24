@@ -18,7 +18,7 @@ export function WorkCategories() {
         lang === "en"
           ? "Creating islands, restaurants, pubs and mixed use property - from concept design to launch and beyond."
           : "Creando islas, restaurantes, pubs y propiedades de uso mixto - desde el diseño conceptual hasta el lanzamiento.",
-      image: "/placeholder-img.png",
+      image: "/abstract-creative-workspace.jpg",
     },
     {
       number: "02",
@@ -28,7 +28,7 @@ export function WorkCategories() {
         lang === "en"
           ? "Elevating tourism, reimagining hotels and shaping destinations worth travelling for."
           : "Elevando el turismo, reimaginando hoteles y formando destinos que valen la pena visitar.",
-      image: "/placeholder-img.png",
+      image: "/brand-design-work.jpg",
     },
     {
       number: "03",
@@ -38,16 +38,17 @@ export function WorkCategories() {
         lang === "en"
           ? "Building luxury consumer brands that shape taste and influence culture."
           : "Construyendo marcas de lujo que definen el gusto e influencian la cultura.",
-      image: "/placeholder-img.png",
+      image: "/creative-team-brainstorming-modern-office.jpg",
     },
   ]
 
   return (
-    <section ref={containerRef} className="py-32 lg:py-40">
+    <section id="what-we-do" ref={containerRef} className="py-32 lg:py-40">
       <div className="space-y-56">
         {categories.map((category, index) => (
           <motion.div
             key={category.number}
+            id={index === 0 ? "islands" : index === 1 ? "travel" : "luxury"}
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, margin: "-120px" }}

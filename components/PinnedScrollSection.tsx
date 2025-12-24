@@ -122,7 +122,7 @@ export function PinnedScrollSection() {
               className="relative aspect-[4/5] overflow-hidden rounded-lg hover-zoom-image"
             >
               <Image
-                src="/placeholder-img.png"
+                src="/agency-team-working.jpg"
                 alt="Agency workspace"
                 fill
                 className="object-cover"
@@ -135,7 +135,7 @@ export function PinnedScrollSection() {
               className="relative aspect-[4/5] overflow-hidden rounded-lg hover-zoom-image"
             >
               <Image
-                src="/placeholder-img.png"
+                src="/brand-strategy-planning-design-thinking.jpg"
                 alt="Strategy planning"
                 fill
                 className="object-cover"
@@ -148,7 +148,7 @@ export function PinnedScrollSection() {
               className="relative aspect-[4/5] overflow-hidden rounded-lg hover-zoom-image"
             >
               <Image
-                src="/placeholder-img.png"
+                src="/creative-team-brainstorming-modern-office.jpg"
                 alt="Team brainstorming"
                 fill
                 className="object-cover"

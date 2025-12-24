@@ -7,6 +7,7 @@ import type React from "react"
 import { motion } from "framer-motion"
 import { useState } from "react"
 import { useLanguage } from "@/hooks/use-language"
+import { ArrowUpRight } from "lucide-react"
 
 export function CTASection() {
   const { lang } = useLanguage()
@@ -67,9 +68,10 @@ export function CTASection() {
             />
             <button
               type="submit"
-              className="bg-foreground px-10 py-4 text-sm font-bold uppercase tracking-[0.3em] text-background transition-all hover:bg-foreground/90 hover:scale-105 active:scale-95"
+              className="px-8 py-4 text-[10px] font-bold uppercase tracking-[0.4em] text-foreground link-premium-arrow transition-all flex items-center gap-2"
             >
               {lang === "en" ? "Join" : "Unirse"}
+              <ArrowUpRight className="w-4 h-4" />
             </button>
           </form>
         </motion.div>

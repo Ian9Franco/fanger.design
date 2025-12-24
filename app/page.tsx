@@ -5,6 +5,7 @@ import { WorkCategories } from "@/components/WorkCategories"
 import { PinnedScrollSection } from "@/components/PinnedScrollSection"
 import { WorkShowcase } from "@/components/WorkShowcase"
 import { Clients } from "@/components/Clients"
+import { LatestNews } from "@/components/LatestNews"
 import { CTASection } from "@/components/CTASection"
 
 export default function HomePage() {
@@ -15,6 +16,7 @@ export default function HomePage() {
       <PinnedScrollSection />
       <WorkShowcase />
       <Clients />
+      <LatestNews />
       <CTASection />
     </>
   )

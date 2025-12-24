@@ -1,72 +1,87 @@
-// Archivo de traducciones en inglés
-// Todas las copias del sitio web deben vivir aquí para facilitar mantenimiento
-
 export const en = {
-  // Navegación
-  nav: {
-    work: "Work",
-    services: "Services",
+  header: {
+    home: "Home",
     about: "About",
-    contact: "Contact",
+    whatWeDo: "What We Do",
+    hello: "HELLO@FANGER.DESIGN",
+    menu: {
+      whoWeHelp: "WHO WE HELP",
+      whatWeDo: "WHAT WE DO",
+      viewAllWork: "VIEW ALL WORK",
+      close: "CLOSE",
+      helpItems: ["Travel & Hotels", "Consumer Brands", "Property", "Entertainment", "Hospitality"],
+      doItems: ["Strategy", "Branding", "Placemaking", "Place Culture", "PR", "Social", "Marketing", "Content"]
+    }
   },
-
-  // Hero / Página principal
   hero: {
     overline: "AN",
-    title: "Earned-Led Culture Agency",
+    title: {
+      earned: "EARNED-LED",
+      culture: "CULTURE",
+      agency: "AGENCY"
+    },
     subtitle: "In a world overloaded with noise, brands don't win by chasing attention—they earn it.",
-    cta: "What we do",
+    cta: "WHAT WE DO",
+    marquee: "BUILDING LUXURY CONSUMER BRANDS THAT SHAPE TASTE"
   },
-
-  // Sección de clientes
   clients: {
-    title: "Trusted By",
-    description: "We've partnered with forward-thinking brands across industries",
+    log: "[ KEY_CLIENTS_LOG ]",
+    title: "Selected Partners"
   },
-
-  // Servicios
-  services: {
-    title: "What We Do",
-    items: [
+  about: {
+    hero: {
+      foundation: "EST. 2017",
+      classification: "Earned-Led Agency",
+      title1: "PURE",
+      title2: "CULTURE.",
+      report: "[ ANALYSIS_REPORT_001 ]",
+      reportText: "We create and amplify the world's most-talked about brands, destinations and experiences.",
+      reveal: "An independently owned earned-led culture agency focused on creating brand moments that earn attention through authentic engagement."
+    },
+    sections: [
       {
-        title: "Brand Strategy",
-        description: "Defining positioning, purpose, and narratives that resonate.",
+        id: "01",
+        title: "WE CREATE",
+        subtitle: "Brand moments that earn attention.",
+        description: "People won't take notice unless you give them a genuine reason to. From identity to campaigns, we cut through the noise with purpose—earning brands cultural relevance and lasting, authentic engagement.",
+        categories: ["Brand Identity", "PR-Led Ideas", "Social-Led Campaigns", "Creative & Content Development"]
       },
       {
-        title: "Digital Design",
-        description: "Creating interfaces and experiences that engage and convert.",
+        id: "02",
+        title: "WE DESIGN",
+        subtitle: "Places that draw people in & keep them coming back.",
+        description: "Venues that make an impact have a story to tell. From hotels, to restaurants, to retail—we use our placemaking and branding expertise to craft places and experiences that stay with people.",
+        categories: ["Hotels", "Bars", "Restaurants", "Retail", "Hospitality Concepts", "Placemaking"]
       },
       {
-        title: "Development",
-        description: "Building scalable, performant web platforms with modern tech.",
-      },
-      {
-        title: "Creative Direction",
-        description: "Leading visual identities and campaigns with clarity and impact.",
-      },
+        id: "03",
+        title: "WE SHAPE",
+        subtitle: "Place culture that keeps destinations relevant.",
+        description: "Places that last offer more than just a service. We shape the culture of destinations, going beyond what's expected to create venues that truly mean something to their people and community.",
+        categories: ["Cultural Place Strategy", "Precinct Positioning", "Art & Music Curation", "Community Integration"]
+      }
     ],
+    stats: [
+      { label: "Global Reach", value: "500+", sub: "Projects" },
+      { label: "Launch Rate", value: "100+", sub: "Venues" },
+      { label: "Expertise", value: "20+", sub: "Years" },
+      { label: "Network", value: "05+", sub: "Countries" }
+    ],
+    cta: "Request Full Case Study"
   },
-
-  // Footer
   footer: {
-    newsletter: {
-      title: "Stay Updated",
-      description: "Subscribe to our newsletter for insights and updates.",
-      placeholder: "Enter your email",
-      button: "Subscribe",
-    },
-    contact: {
-      title: "Get In Touch",
-      email: "hello@agency.com",
-      phone: "+1 (555) 123-4567",
-    },
-    links: {
-      company: "Company",
-      legal: "Legal",
-    },
-    social: {
-      title: "Follow Us",
-    },
-    copyright: "© 2025 Agency. All rights reserved.",
-  },
+    connect: "Connect (02)",
+    tagline: "An Earned-Led Culture Agency shaping the future of brands.",
+    title1: "READY TO TALK?",
+    title2: "GET IN TOUCH",
+    offices: "Offices (03)",
+    newsletter: "Newsletter",
+    placeholder: "Your email address...",
+    acknowledgement: "We acknowledge the traditional custodians of the lands on which we work and create.",
+    privacy: "Privacy Policy",
+    sustainability: "Sustainability",
+    project: "Project: Fanger Web v2.0",
+    design: "Design",
+    dev: "Development",
+  }
 } as const
