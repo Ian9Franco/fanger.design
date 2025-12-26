@@ -1,121 +1,124 @@
 "use client"
 
 /**
- * Grid de logos que rotan en 3D al hacer hover o scroll
- * - Cada logo tiene dos caras (front y back)
- * - Usa transform-style: preserve-3d para efecto 3D
- * - Se activa con hover y al entrar en viewport
+ * Showcase Section (Made with Fanger)
+ * Replicates the Osmo Community 'Made with Osmo' section.
+ * Features: Grid of project cards, minimal typography, 'Resources Used' style tags, and smooth hover effects.
  */
 
-import { useState, useEffect, useRef } from "react"
-import { motion } from "framer-motion"
+import { useState, useRef } from "react"
+import { motion, useInView } from "framer-motion"
 import { useLanguage } from "@/hooks/use-language"
 import Image from "next/image"
 import { clients } from "@/data/clients"
+import { ArrowUpRight } from "lucide-react"
 
 export function FlippingLogos() {
-  const { lang } = useLanguage()
-  const [flippedIndexes, setFlippedIndexes] = useState<Set<number>>(new Set())
+  const { lang, t } = useLanguage()
   const sectionRef = useRef<HTMLElement>(null)
+  const isInView = useInView(sectionRef, { once: true, margin: "-10%" })
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            // Flip all logos when section comes into view with stagger
-            clients.forEach((_, index) => {
-              setTimeout(() => {
-                setFlippedIndexes((prev) => new Set(prev).add(index))
-              }, index * 100)
-            })
-          }
-        })
-      },
-      { threshold: 0.3 },
-    )
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current)
-    }
-
-    return () => observer.disconnect()
-  }, [])
+  // Synthetic tags for the showcase to look like Osmo's "Resources Used"
+  const getTags = (index: number) => {
+    const tags = [
+      ["Branding", "Strategy"],
+      ["Web Design", "Development"],
+      ["Art Direction", "Motion"],
+      ["Campaign", "Social"],
+      ["Identity", "Print"],
+      ["Digital", "UX/UI"],
+      ["Commerce", "Growth"],
+      ["Content", "Video"]
+    ]
+    return tags[index % tags.length]
+  }
 
   return (
-    <section ref={sectionRef} className="py-24 lg:py-32">
-      <div className="container mx-auto px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-16 text-center"
-        >
-          <h2 className="text-3xl font-bold md:text-4xl lg:text-5xl">
-            {lang === "en" ? "Trusted by Industry Leaders" : "Confiado por Líderes de la Industria"}
-          </h2>
-        </motion.div>
+    <section ref={sectionRef} className="py-24 lg:py-32 bg-white relative overflow-hidden">
+      {/* Background Decor */}
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-black/10 to-transparent" />
 
-        {/* Grid de logos con efecto flip 3D */}
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4 lg:gap-12">
+      <div className="container mx-auto px-6 lg:px-8">
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
+          >
+            <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-400 mb-4 block">
+              {lang === "en" ? "Selected Work" : "Trabajos Seleccionados"}
+            </span>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-black">
+              Made with Fanger
+            </h2>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="hidden md:block"
+          >
+            <a href="/work" className="group flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-black hover:text-neutral-500 transition-colors">
+              {lang === "en" ? "View All Projects" : "Ver Todos los Proyectos"}
+              <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+            </a>
+          </motion.div>
+        </div>
+
+        {/* Projects Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
           {clients.map((client, index) => (
-            <div
+            <motion.div
               key={client.name}
-              className="flip-card group perspective-1000 h-40"
-              onMouseEnter={() => setFlippedIndexes((prev) => new Set(prev).add(index))}
-              onMouseLeave={() => {
-                setFlippedIndexes((prev) => {
-                  const newSet = new Set(prev)
-                  newSet.delete(index)
-                  return newSet
-                })
-              }}
+              initial={{ opacity: 0, y: 40 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              className="group cursor-pointer"
             >
-              <motion.div
-                className="flip-card-inner relative h-full w-full transition-transform duration-700"
-                style={{
-                  transformStyle: "preserve-3d",
-                  transform: flippedIndexes.has(index) ? "rotateY(180deg)" : "rotateY(0deg)",
-                }}
-              >
-                {/* Front Face */}
-                <div
-                  className="flip-card-face absolute flex h-full w-full items-center justify-center border border-border bg-background p-8"
-                  style={{ backfaceVisibility: "hidden" }}
-                >
+              {/* Card Image / Logo Area */}
+              <div className="relative aspect-[4/3] bg-neutral-50 border border-neutral-100 mb-6 overflow-hidden rounded-sm transition-all duration-500 group-hover:shadow-lg group-hover:border-neutral-200">
+                <div className="absolute inset-0 flex items-center justify-center p-8 group-hover:scale-105 transition-transform duration-700">
                   <Image
                     src={client.logo || "/placeholder.svg"}
                     alt={client.name}
-                    width={140}
-                    height={70}
-                    className="h-auto w-full max-w-[140px] object-contain grayscale transition-all group-hover:grayscale-0"
+                    width={160}
+                    height={80}
+                    className="w-full h-auto object-contain max-h-[60px] grayscale group-hover:grayscale-0 transition-all duration-500 opacity-60 group-hover:opacity-100"
                   />
                 </div>
+                
+                {/* Overlay on hover */}
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500" />
+              </div>
 
-                {/* Back Face */}
-                <div
-                  className="flip-card-face absolute flex h-full w-full flex-col items-center justify-center border border-border bg-foreground p-8 text-background"
-                  style={{
-                    backfaceVisibility: "hidden",
-                    transform: "rotateY(180deg)",
-                  }}
-                >
-                  <p className="text-center text-sm font-bold uppercase tracking-wider">{client.name}</p>
-                  <p className="mt-2 text-center text-xs opacity-80">
-                    {lang === "en" ? "Trusted Partner" : "Socio de Confianza"}
-                  </p>
+              {/* Card Info */}
+              <div className="space-y-3">
+                <h3 className="text-lg font-bold text-black group-hover:text-neutral-600 transition-colors">
+                  {client.name}
+                </h3>
+                
+                {/* Tags mimicking 'Resources Used' */}
+                <div className="flex flex-wrap gap-y-2 gap-x-4 pt-2 border-t border-dashed border-neutral-200">
+                  <div>
+                    <span className="text-[9px] uppercase tracking-wider text-neutral-400 block mb-1">
+                      {lang === "en" ? "Services" : "Servicios"}
+                    </span>
+                    <div className="flex flex-wrap gap-2">
+                      {getTags(index).map((tag) => (
+                        <span key={tag} className="text-xs font-medium text-neutral-600 bg-neutral-100 px-2 py-0.5 rounded-full">
+                          @{tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              </motion.div>
-            </div>
+              </div>
+            </motion.div>
           ))}
         </div>
       </div>
-
-      <style jsx>{`
-        .perspective-1000 {
-          perspective: 1000px;
-        }
-      `}</style>
     </section>
   )
 }

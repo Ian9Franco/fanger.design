@@ -6,10 +6,14 @@ import { useLanguage } from "@/hooks/use-language"
 import Link from "next/link"
 import { useRef } from "react"
 import { ArrowUpRight } from "lucide-react"
+import Image from "next/image"
+
+// UPDATE: Footer redesigned with Yucca-inspired layout and structure
+// Referencia: https://yucca.co.za (footer structure, spacing, hierarchy)
+// Motivo: Replicar diseño limpio y profesional con mejor organización de contenido
 
 /**
  * SplitText component - Animates every character with stagger effect
- * Now works consistently across all languages
  */
 function SplitText({ text, className = "" }: { text: string; className?: string }) {
   const words = text.split(" ")
@@ -64,8 +68,8 @@ function AnimatedLink({ href, children, subtext }: { href: string; children: Rea
 }
 
 /**
- * Footer Component - Inspired by weareexample.com
- * Optimized for all screen sizes with proper content visibility
+ * Footer Component - Inspired by Yucca design
+ * UPDATE: Simplified structure with cleaner sections and better visual hierarchy
  */
 export function Footer() {
   const { t } = useLanguage()
@@ -86,11 +90,11 @@ export function Footer() {
     >
       {/* Background Image with Parallax */}
       <motion.div style={{ y: imageY }} className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/90 to-black/70 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/95 to-black/80 z-10" />
         <img
           src="/abstract-creative-culture-agency-background.jpg"
           alt="Background"
-          className="w-full h-full object-cover opacity-30 grayscale"
+          className="w-full h-full object-cover opacity-20 grayscale"
         />
       </motion.div>
 
@@ -98,55 +102,25 @@ export function Footer() {
         style={{ opacity }}
         className="relative z-10 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-12 md:py-16 lg:py-20"
       >
-        {/* TOP SECTION - Social Links & Tagline */}
-        <div className="max-w-[1800px] mx-auto mb-12 md:mb-16 lg:mb-20 pb-8 md:pb-12 border-b border-white/10">
-          <div className="flex flex-col lg:flex-row justify-between items-start gap-8 lg:gap-12">
-            {/* Social Links */}
-            <div className="space-y-4">
-              <p className="text-[9px] md:text-[10px] font-c uppercase tracking-[0.4em] text-white/40">
-                {t.footer.connect}
-              </p>
-              <div className="flex gap-6 md:gap-8">
-                <a
-                  href="https://instagram.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-b text-sm md:text-base uppercase tracking-wider text-white/60 hover:text-white link-travel transition-colors"
-                >
-                  Instagram
-                </a>
-                <a
-                  href="https://linkedin.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-b text-sm md:text-base uppercase tracking-wider text-white/60 hover:text-white link-travel transition-colors"
-                >
-                  LinkedIn
-                </a>
-              </div>
-            </div>
-
-            {/* Company Tagline */}
-            <div className="max-w-md lg:text-right space-y-2">
-              <h2 className="text-2xl md:text-3xl font-a font-bold tracking-tight">FANGER DESIGN</h2>
-              <p className="text-sm md:text-base font-d italic text-white/50 leading-relaxed">{t.footer.tagline}</p>
-            </div>
-          </div>
-        </div>
-
         {/* MAIN SECTION - Hero Text & Contact Info */}
         <div className="max-w-[1800px] mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 xl:gap-24 mb-12 md:mb-16 lg:mb-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 xl:gap-24 mb-16 md:mb-20 lg:mb-24">
             {/* LEFT - Hero Text */}
-            <div className="space-y-2 md:space-y-3">
+            <div className="space-y-3 md:space-y-4">
+              <p className="text-[9px] md:text-[10px] font-c uppercase tracking-[0.4em] text-white/40 mb-6">
+                {t.footer.connect}
+              </p>
               <h1 className="font-a font-bold leading-[0.9] tracking-tight text-white overflow-hidden">
-                <div className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[7rem] overflow-hidden">
+                <div className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl overflow-hidden">
                   <SplitText text={t.footer.title1} />
                 </div>
-                <div className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[7rem] overflow-hidden">
+                <div className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl overflow-hidden">
                   <SplitText text={t.footer.title2} />
                 </div>
               </h1>
+              <p className="text-base md:text-lg font-b text-white/60 leading-relaxed max-w-xl pt-6">
+                {t.footer.tagline}
+              </p>
             </div>
 
             {/* RIGHT - Office Locations */}
@@ -168,9 +142,49 @@ export function Footer() {
             </div>
           </div>
 
-          {/* NEWSLETTER SECTION */}
-          <div className="border-t border-white/10 pt-10 md:pt-12 lg:pt-16 pb-8 md:pb-12">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-end">
+          {/* SOCIAL & NEWSLETTER SECTION */}
+          <div className="border-t border-white/10 pt-10 md:pt-12 pb-10 md:pb-12">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
+              {/* Social Links */}
+              <div className="space-y-4">
+                <p className="text-[9px] md:text-[10px] font-c uppercase tracking-[0.4em] text-white/40">Follow Us</p>
+                <div className="flex flex-wrap gap-6 md:gap-8">
+                  <a
+                    href="https://instagram.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-b text-sm md:text-base uppercase tracking-wider text-white/60 hover:text-white transition-colors relative group"
+                  >
+                    <span className="relative">
+                      Instagram
+                      <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full" />
+                    </span>
+                  </a>
+                  <a
+                    href="https://linkedin.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-b text-sm md:text-base uppercase tracking-wider text-white/60 hover:text-white transition-colors relative group"
+                  >
+                    <span className="relative">
+                      LinkedIn
+                      <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full" />
+                    </span>
+                  </a>
+                  <a
+                    href="https://twitter.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-b text-sm md:text-base uppercase tracking-wider text-white/60 hover:text-white transition-colors relative group"
+                  >
+                    <span className="relative">
+                      Twitter
+                      <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full" />
+                    </span>
+                  </a>
+                </div>
+              </div>
+
               {/* Newsletter Form */}
               <div className="space-y-4">
                 <p className="text-[9px] md:text-[10px] font-c uppercase tracking-[0.4em] text-white/40">
@@ -185,16 +199,11 @@ export function Footer() {
                   <button
                     type="submit"
                     className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/30 flex items-center justify-center hover:bg-white hover:text-black transition-all duration-300 flex-shrink-0 hover-arrow"
-                    aria-label="Sign me up"
+                    aria-label="Subscribe"
                   >
                     <ArrowUpRight className="w-5 h-5 md:w-6 md:h-6" />
                   </button>
                 </form>
-              </div>
-
-              {/* Acknowledgement */}
-              <div className="text-[9px] md:text-[10px] font-c uppercase tracking-wide leading-relaxed text-white/30 lg:text-right max-w-md lg:ml-auto">
-                {t.footer.acknowledgement}
               </div>
             </div>
           </div>
@@ -203,28 +212,59 @@ export function Footer() {
           <div className="border-t border-white/5 pt-8 text-[9px] md:text-[10px] font-c uppercase tracking-wider text-white/40">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 md:gap-8">
               {/* Left - Copyright & Legal */}
-              <div className="flex flex-wrap gap-x-6 gap-y-3">
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+                <div className="relative w-24 h-6 mb-1 md:mb-0">
+                  <Image
+                    src="/logo/Logo-Fanger-Footer-black-V1.0-1.png"
+                    alt="Fanger Logo"
+                    fill
+                    className="object-contain object-left"
+                  />
+                </div>
                 <span className="text-white/60 font-semibold">©2025 FANGER®</span>
-                <a href="#" className="hover:text-white transition-colors link-travel pb-1">
-                  {t.footer.privacy}
-                </a>
-                <a href="#" className="hover:text-white transition-colors link-travel pb-1">
-                  {t.footer.sustainability}
-                </a>
+                <Link href="#" className="hover:text-white transition-colors relative group">
+                  <span className="relative">
+                    {t.footer.privacy}
+                    <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full" />
+                  </span>
+                </Link>
+                <Link href="#" className="hover:text-white transition-colors relative group">
+                  <span className="relative">
+                    {t.footer.sustainability}
+                    <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full" />
+                  </span>
+                </Link>
               </div>
 
               {/* Right - Project Credits */}
               <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
                 <span className="font-d italic normal-case text-white/30 text-[9px]">{t.footer.project}</span>
-                <a href="#" className="font-semibold text-white/60 hover:text-white transition-colors link-travel pb-1">
-                  {t.footer.design}
-                </a>
+                <Link
+                  href="#"
+                  className="font-semibold text-white/60 hover:text-white transition-colors relative group"
+                >
+                  <span className="relative">
+                    {t.footer.design}
+                    <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full" />
+                  </span>
+                </Link>
                 <span className="text-white/20">•</span>
-                <a href="#" className="font-semibold text-white/60 hover:text-white transition-colors link-travel pb-1">
-                  {t.footer.dev}
-                </a>
+                <Link
+                  href="#"
+                  className="font-semibold text-white/60 hover:text-white transition-colors relative group"
+                >
+                  <span className="relative">
+                    {t.footer.dev}
+                    <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full" />
+                  </span>
+                </Link>
               </div>
             </div>
+          </div>
+
+          {/* Acknowledgement */}
+          <div className="mt-12 text-[9px] md:text-[10px] font-c uppercase tracking-wide leading-relaxed text-white/30 max-w-2xl">
+            {t.footer.acknowledgement}
           </div>
         </div>
       </motion.div>

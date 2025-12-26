@@ -1,216 +1,216 @@
 "use client"
 
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useLanguage } from "@/hooks/use-language"
 import { LanguageToggle } from "./LanguageToggle"
 import { Logo } from "./ui/Logo"
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
+import { cn } from "@/lib/utils"
 import { X } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
 
+/**
+ * Osmo-style Floating Header with Overlay Menu
+ */
 export function Header() {
   const { t } = useLanguage()
+  const { scrollY } = useScroll()
+  const [isScrolled, setIsScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+
+  // Transform header width/style based on scroll
+  const headerWidth = useTransform(scrollY, [0, 100], ["100%", "90%"])
+  const headerY = useTransform(scrollY, [0, 100], [0, 20])
+  
+  // Basic scroll detection
+  useEffect(() => {
+    return scrollY.onChange((latest) => {
+      setIsScrolled(latest > 50)
+    })
+  }, [scrollY])
+
+  // Prevent scrolling when menu is open
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = "unset"
+    }
+  }, [menuOpen])
 
   return (
     <>
-      {/* Header fijo */}
-      <header className="fixed left-0 right-0 top-0 z-50 bg-white border-b border-black/5 transition-all">
-        <nav className="container mx-auto flex items-center justify-between px-6 py-4 lg:px-8">
-          
-          {/* Logo - Left Side */}
-          <Logo />
+      <motion.header
+        style={{
+          width: isScrolled ? headerWidth : "100%",
+          y: isScrolled ? headerY : 0,
+        }}
+        className={cn(
+          "fixed left-0 right-0 top-0 z-50 mx-auto transition-all duration-500 ease-[0.22,1,0.36,1]",
+          isScrolled 
+            ? "max-w-5xl px-6 py-3 bg-white/80 backdrop-blur-md border border-neutral-200/50 shadow-sm rounded-full" 
+            : "px-8 py-6 bg-transparent"
+        )}
+      >
+        <div className="flex items-center justify-between">
+          {/* Logo */}
+          <div className="flex-shrink-0 relative z-50">
+            <Logo />
+          </div>
 
-          {/* Desktop Navigation - CENTERED */}
-          <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 items-center">
-            <ul className="flex items-center gap-10">
+          {/* Center Navigation (Desktop Pill) */}
+          <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2">
+            <ul className={cn(
+              "flex items-center gap-1 p-1 transition-all duration-300",
+              isScrolled ? "" : "bg-neutral-100/50 rounded-full border border-neutral-200/50"
+            )}>
               <li>
-                <Link 
-                  href="/" 
-                  className="font-b text-[11px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100 opacity-60 relative group link-travel pb-1 h-8 flex items-center"
-                >
+                <Link href="/" className="px-5 py-2 text-xs font-medium uppercase tracking-wider text-neutral-600 hover:text-black transition-all hover:bg-white rounded-full">
                   {t.header.home}
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/about" 
-                  className="font-b text-[11px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100 opacity-60 relative group link-travel pb-1 h-8 flex items-center"
-                >
+                <Link href="/about" className="px-5 py-2 text-xs font-medium uppercase tracking-wider text-neutral-600 hover:text-black transition-all hover:bg-white rounded-full">
                   {t.header.about}
                 </Link>
               </li>
               <li>
-                <button
+                <button 
                   onClick={() => setMenuOpen(!menuOpen)}
-                  className="font-b text-[11px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100 opacity-60 relative group link-travel pb-1 h-8 flex items-center p-0 m-0 border-none bg-transparent appearance-none cursor-pointer"
+                  className="px-5 py-2 text-xs font-medium uppercase tracking-wider text-neutral-600 hover:text-black transition-all hover:bg-white rounded-full flex items-center gap-2"
                 >
                   {t.header.whatWeDo}
+                  <span className={`text-[10px] transition-transform duration-300 ${menuOpen ? "rotate-180" : ""}`}>
+                    ▼
+                  </span>
                 </button>
               </li>
+              <li>
+                <Link href="/contact" className="px-5 py-2 text-xs font-medium uppercase tracking-wider text-neutral-600 hover:text-black transition-all hover:bg-white rounded-full">
+                  {t.header.contact}
+                </Link>
+              </li>
             </ul>
-          </div>
+          </nav>
 
-          {/* Right Side - Email (Desktop) + Language */}
-          <div className="hidden md:flex items-center gap-12">
-            <a 
-              href={`mailto:${t.header.hello}`} 
-              className="font-c text-[10px] font-bold uppercase tracking-widest hover:opacity-50 transition-opacity link-travel pb-1 flex-shrink-0 whitespace-nowrap"
+          {/* Right Area */}
+          <div className="flex items-center gap-4 relative z-50">
+            <LanguageToggle />
+            
+            <Link 
+              href="/contact"
+              className={cn(
+                "hidden md:flex bg-black text-white text-[10px] uppercase font-bold tracking-widest px-6 py-2.5 rounded-full",
+                "hover:scale-105 transition-transform duration-300 active:scale-95"
+              )}
             >
               {t.header.hello}
-            </a>
-            <LanguageToggle />
-          </div>
+            </Link>
 
-          {/* Mobile menu button */}
-          <div className="flex items-center gap-4 md:hidden">
-            <LanguageToggle />
+            {/* Mobile/Menu Toggle Button */}
             <button 
-              onClick={() => setMenuOpen(!menuOpen)} 
-              className="relative w-6 h-4 flex flex-col justify-between transition-all"
-              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="p-2 w-10 h-10 flex items-center justify-center rounded-full hover:bg-neutral-100 transition-colors"
             >
-              <span 
-                className={`w-full h-0.5 bg-black transition-all duration-300 origin-center ${
-                  menuOpen ? 'rotate-45 translate-y-[7px]' : ''
-                }`}
-              />
-              <span 
-                className={`w-full h-0.5 bg-black transition-all duration-300 origin-center ${
-                  menuOpen ? '-rotate-45 -translate-y-[7px]' : ''
-                }`}
-              />
+              <div className="space-y-1.5 w-6">
+                <motion.span 
+                  animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 8 : 0 }} 
+                  className="block w-full h-0.5 bg-black" 
+                />
+                <motion.span 
+                  animate={{ opacity: menuOpen ? 0 : 1 }} 
+                  className="block w-full h-0.5 bg-black" 
+                />
+                <motion.span 
+                  animate={{ rotate: menuOpen ? -45 : 0, y: menuOpen ? -8 : 0 }} 
+                  className="block w-full h-0.5 bg-black" 
+                />
+              </div>
             </button>
           </div>
-        </nav>
-      </header>
+        </div>
+      </motion.header>
 
-      {/* "What We Do" popup overlay */}
+      {/* FULL SCREEN OVERLAY MENU */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-50 bg-black selection:bg-white selection:text-black"
+            initial={{ opacity: 0, scale: 0.98, y: -20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.98, y: -20 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-0 z-40 bg-white/95 backdrop-blur-xl flex items-center justify-center pt-24 pb-12"
           >
-            <div className="container mx-auto px-6 lg:px-8 h-full flex flex-col">
-              {/* Close button - Desktop */}
-              <motion.div 
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="hidden md:flex justify-end py-8"
-              >
-                <button
-                  onClick={() => setMenuOpen(false)}
-                  className="text-white font-c text-[10px] uppercase tracking-[0.3em] flex items-center gap-3 group"
-                >
-                  <span className="opacity-50 group-hover:opacity-100 transition-opacity">{t.header.menu.close}</span>
-                  <X className="h-4 w-4 transition-transform group-hover:rotate-90" />
-                </button>
-              </motion.div>
+            {/* Background Grid */}
+            <div className="absolute inset-0 z-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:40px_40px]" />
 
-              {/* Menu content */}
-              <div className="flex-1 flex items-center justify-center">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-20 lg:gap-32 w-full max-w-6xl">
-                  {/* Mobile Links */}
-                  <div className="md:hidden text-center space-y-10">
-                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-                      <Link href="/" onClick={() => setMenuOpen(false)} className="block text-4xl font-a font-black text-white">{t.header.home}</Link>
-                    </motion.div>
-                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-                      <Link href="/about" onClick={() => setMenuOpen(false)} className="block text-4xl font-a font-black text-white">{t.header.about}</Link>
-                    </motion.div>
-                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
-                      <Link href="/#what-we-do" onClick={() => setMenuOpen(false)} className="block text-4xl font-a font-black text-white">{t.header.whatWeDo}</Link>
-                    </motion.div>
+            <div className="container mx-auto px-6 h-full flex flex-col relative z-10">
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 h-full py-12">
+                
+                {/* Left Column - WHO WE HELP */}
+                <div className="lg:col-span-5 space-y-8">
+                  <div className="border-b border-black/10 pb-4">
+                    <h3 className="text-xs font-mono uppercase tracking-[0.3em] text-neutral-400">
+                      {t.header.menu.whoWeHelp}
+                    </h3>
                   </div>
-
-                  {/* Who We Help - Desktop */}
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.2, duration: 0.6 }}
-                    className="hidden md:block"
-                  >
-                    <h3 className="font-c text-[10px] font-bold uppercase tracking-[0.4em] mb-12 text-white/30">{t.header.menu.whoWeHelp}</h3>
-                    <ul className="space-y-6">
-                      {t.header.menu.helpItems.map((item, i) => {
-                        const hrefs = ["/#travel", "/#luxury", "/#islands", "/#islands", "/#islands"];
-                        return (
-                          <motion.li
-                            key={item}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.3 + i * 0.05 }}
-                          >
-                            <Link href={hrefs[i] || "#"} onClick={() => setMenuOpen(false)} className="group text-4xl lg:text-5xl font-a font-bold text-white/80 hover:text-white transition-all flex items-center gap-4 link-travel pb-2">
-                              <span className="font-c text-[10px] opacity-20 group-hover:opacity-100 transition-opacity">0{i+1}</span>
-                              <span>{item}</span>
-                            </Link>
-                          </motion.li>
-                        )
-                      })}
-                    </ul>
-                  </motion.div>
-
-                  {/* What We Do - Desktop */}
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3, duration: 0.6 }}
-                    className="hidden md:block"
-                  >
-                    <h3 className="font-c text-[10px] font-bold uppercase tracking-[0.4em] mb-12 text-white/30">{t.header.menu.whatWeDo}</h3>
-                    <ul className="space-y-6">
-                      {t.header.menu.doItems.map((item, i) => {
-                         const hrefs = [
-                           "/about#we-create", // Strategy
-                           "/about#we-create", // Branding
-                           "/about#we-design", // Placemaking
-                           "/about#we-shape",  // Place Culture
-                           "/about#we-create", // PR
-                           "/about#we-create", // Social
-                           "/about#we-create", // Marketing
-                           "/about#we-create"  // Content
-                         ];
-                         return (
-                          <motion.li
-                            key={item}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.4 + i * 0.05 }}
-                          >
-                            <Link href={hrefs[i] || "#"} onClick={() => setMenuOpen(false)} className="group text-4xl lg:text-5xl font-a font-bold text-white/80 hover:text-white transition-all flex items-center gap-4 link-travel pb-2">
-                              <span className="font-c text-[10px] opacity-20 group-hover:opacity-100 transition-opacity">0{i+1}</span>
-                              <span>{item}</span>
-                            </Link>
-                          </motion.li>
-                         )
-                      })}
-                    </ul>
-                  </motion.div>
+                  <ul className="space-y-6">
+                    {t.header.menu.helpItems.map((item, idx) => (
+                      <motion.li 
+                        key={idx}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.1 + idx * 0.05 }}
+                        className="text-2xl sm:text-3xl md:text-4xl font-serif italic text-neutral-400 hover:text-black transition-colors cursor-default"
+                      >
+                        {item}
+                      </motion.li>
+                    ))}
+                  </ul>
                 </div>
+
+                {/* Right Column - WHAT WE DO */}
+                <div className="lg:col-span-7 space-y-8">
+                  <div className="border-b border-black/10 pb-4">
+                    <h3 className="text-xs font-mono uppercase tracking-[0.3em] text-neutral-400">
+                      {t.header.menu.whatWeDo}
+                    </h3>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
+                    {t.header.menu.doItems.map((item, idx) => (
+                      <motion.li 
+                        key={idx}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.2 + idx * 0.05 }}
+                        className="list-none group cursor-pointer"
+                      >
+                        <Link href="/#services" onClick={() => setMenuOpen(false)} className="flex items-center justify-between py-4 border-b border-neutral-100 group-hover:border-black/20 transition-all">
+                          <span className="text-lg md:text-xl font-medium group-hover:pl-4 transition-all duration-300">
+                            {item}
+                          </span>
+                          <span className="opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+                            →
+                          </span>
+                        </Link>
+                      </motion.li>
+                    ))}
+                  </div>
+                </div>
+
               </div>
 
-              {/* View All Work link */}
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 }}
-                className="py-12 border-t border-white/5 text-center"
-              >
-                <Link
-                  href="/#what-we-do"
-                  onClick={() => setMenuOpen(false)}
-                  className="group inline-flex items-center gap-4 text-[10px] font-c uppercase tracking-[0.4em] text-white/40 hover:text-white transition-colors"
-                >
-                   <span className="inline-block transition-transform group-hover:translate-x-2">↳</span>
-                   {t.header.menu.viewAllWork}
-                </Link>
-              </motion.div>
+              {/* Menu Footer */}
+              <div className="mt-auto flex justify-between items-end border-t border-black/10 pt-8">
+                 <Link href="/work" className="text-sm font-bold uppercase tracking-widest link-premium-arrow">
+                    {t.header.menu.viewAllWork}
+                 </Link>
+                 <button onClick={() => setMenuOpen(false)} className="text-xs font-mono uppercase text-neutral-400 hover:text-black transition-colors">
+                    {t.header.menu.close} [ESC]
+                 </button>
+              </div>
+
             </div>
           </motion.div>
         )}

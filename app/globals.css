@@ -38,7 +38,7 @@
   --sidebar-accent-foreground: oklch(0.05 0 0);
   --sidebar-border: oklch(0.88 0 0);
   --sidebar-ring: oklch(0.05 0 0);
-  
+
   /* Modular Typography */
   --font-a: var(--font-space-grotesk);
   --font-b: var(--font-inter);
@@ -89,6 +89,7 @@
   --font-sans: var(--font-b);
   --font-mono: var(--font-c);
   --font-serif: var(--font-d);
+  --font-montserrat: var(--font-montserrat);
   --font-display: var(--font-a);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -139,6 +140,11 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    cursor: none;
+  }
+
+  * {
+    cursor: none !important;
   }
 
   /* Custom scrollbar styling */
@@ -442,21 +448,13 @@
 
 /* Technical background with dots */
 .bg-grid-dots {
-  background-image: radial-gradient(
-    circle,
-    var(--foreground) 1px,
-    transparent 1px
-  );
+  background-image: radial-gradient(circle, var(--foreground) 1px, transparent 1px);
   background-size: 30px 30px;
 }
 
 /* Technical background with lines */
 .bg-grid-lines {
-  background-image: linear-gradient(
-      to right,
-      rgba(0, 0, 0, 0.05) 1px,
-      transparent 1px
-    ),
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
   background-size: 40px 40px;
 }

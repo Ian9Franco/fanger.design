@@ -1,10 +1,9 @@
 "use client"
 
-import { motion, useScroll, useTransform } from "framer-motion"
+import { motion, useScroll, useTransform, BezierDefinition } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import { useRef } from "react"
-import { TechTag, SectionMarker } from "@/components/ui/TechnicalDecor"
 import { useLanguage } from "@/hooks/use-language"
 import { ArrowUpRight } from "lucide-react"
 
@@ -12,125 +11,158 @@ export function NewHero() {
   const { t } = useLanguage()
   const containerRef = useRef<HTMLDivElement>(null)
   
+  // Track scroll progress for the pinned section
+  // Increased height to allow more scroll duration for the effect
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end start"],
+    offset: ["start start", "end end"],
   })
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"])
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.8, 0.6])
+  // Animation values based on scroll
+  const scale = useTransform(scrollYProgress, [0, 0.6], [0.8, 1])
+  const borderRadius = useTransform(scrollYProgress, [0, 0.6], ["2rem", "0rem"])
+  const cardWidth = useTransform(scrollYProgress, [0, 0.6], ["80%", "100%"])
+  const cardHeight = useTransform(scrollYProgress, [0, 0.6], ["70vh", "100vh"])
+  
+  // Content Reveal (happens after card expansion)
+  const contentOpacity = useTransform(scrollYProgress, [0.4, 0.6], [0, 1])
+  const textY = useTransform(scrollYProgress, [0.4, 0.6], [50, 0])
+
+  // Parallax for the restored bottom section image
+  const sectionRef = useRef(null)
+  const { scrollYProgress: bottomSectionProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  })
+  const bottomImageY = useTransform(bottomSectionProgress, [0, 1], ["-25%", "25%"])
+
+  // Easing curve constant to fix TS error
+  const customEase: BezierDefinition = [0.22, 1, 0.36, 1]
+
+  // Letter animation variants
+  const letterVariants = {
+    hidden: { y: "100%" },
+    visible: (i: number) => ({
+      y: "0%",
+      transition: {
+        duration: 0.8,
+        ease: customEase,
+        delay: i * 0.05,
+      },
+    }),
+  }
+
+  const titleChars = "fanger".split("")
 
   return (
-    <div ref={containerRef} className="relative">
-      <div className="absolute top-24 right-0 p-10 z-20 hidden lg:block">
-        <TechTag label="Protocol" value="FNG_CORE_V1" />
+    <div className="relative bg-white text-black">
+      
+      {/* 
+        STICKY SCROLL HERO SECTION 
+        Height is 250vh to allow for scroll distance (pinned effect)
+      */}
+      <div ref={containerRef} className="relative h-[250vh]">
+        <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
+          
+          {/* Transforming Card Container */}
+          <motion.div 
+            style={{ 
+              scale, 
+              borderRadius,
+              width: cardWidth,
+              height: cardHeight
+            }}
+            className="relative bg-[#F3F3F3] overflow-hidden shadow-2xl border border-black/5 origin-center"
+          >
+             {/* Background Pattern */}
+             <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000008_1px,transparent_1px),linear-gradient(to_bottom,#00000008_1px,transparent_1px)] bg-[size:32px_32px]" />
+
+             {/* SVG Decoration */}
+             <motion.div 
+                style={{ opacity: contentOpacity }}
+                className="absolute inset-0 flex items-center justify-center pointer-events-none text-black/5"
+              >
+                 <svg width="90%" height="90%" viewBox="0 0 95 95" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="94.7523" height="94.7523" rx="47.3762" fill="currentColor" />
+                  <path d="M45.6076 48.9678H22.8529V45.6666H45.6076L45.4897 21.8508H49.2625L49.1446 45.6666H71.8993V48.9678H49.1446L49.2625 72.9015H45.4897L45.6076 48.9678Z" fill="white" />
+                </svg>
+             </motion.div>
+
+             {/* Content Layer */}
+             <div className="absolute inset-0 flex flex-col justify-between p-8 md:p-16 lg:p-24 z-10">
+                {/* Top Bar */}
+                <div className="flex justify-between items-start font-mono text-xs uppercase tracking-widest text-neutral-500">
+                  <div className="flex flex-col gap-1">
+                    <span className="text-black font-bold">Chapter 01</span>
+                    <span>Values</span>
+                  </div>
+                  <div className="flex flex-col gap-1 text-right">
+                     <span>Scroll to Explore</span>
+                     <span className="text-black font-bold animate-bounce">↓</span>
+                  </div>
+                </div>
+
+                {/* Center Content - Title */}
+                <div className="flex flex-col items-center justify-center w-full">
+                   <motion.div 
+                    initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1, ease: customEase }}
+                    className="relative w-[70%] max-w-5xl aspect-[4/1] flex items-center justify-center"
+                   >
+                      <Image 
+                        src="/logo/Logo-Fanger-Footer-black-V1.0-1.png" 
+                        alt="Fanger Logo" 
+                        fill
+                        className="object-contain brightness-0"
+                        priority
+                      />
+                   </motion.div>
+                  
+                  {/* Agency Description - Reveals on Scroll */}
+                  <motion.div 
+                    style={{ opacity: contentOpacity, y: textY }}
+                    className="mt-8 text-center max-w-2xl"
+                  >
+                    <h2 className="text-2xl md:text-3xl font-bold mb-4">Strategic Design & Marketing</h2>
+                    <p className="text-lg text-neutral-600 mb-8">We engineer digital solutions that combine aesthetic excellence with measurable performance metrics.</p>
+                    <Link 
+                      href="#what-we-do"
+                      className="inline-flex items-center gap-3 text-sm font-bold uppercase tracking-widest bg-black text-white px-8 py-3 rounded-full hover:bg-neutral-800 transition-colors"
+                    >
+                      View Projects <ArrowUpRight className="w-4 h-4" />
+                    </Link>
+                  </motion.div>
+                </div>
+
+                {/* Bottom Bar */}
+                <div className="flex justify-between items-end font-mono text-xs uppercase tracking-widest text-neutral-500">
+                    <div className="text-black/30 text-xl font-bold">{"</>"}</div>
+                    <div>EST. 2023</div>
+                </div>
+             </div>
+          </motion.div>
+        </div>
       </div>
 
-      <section className="min-h-screen flex items-center justify-center bg-background pt-32 pb-16">
-        <div className="container mx-auto px-6 lg:px-8">
-          <SectionMarker number="00" title="INITIALIZATION" />
-          
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
-            <div className="lg:col-span-8">
-              <motion.div 
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-                className="relative space-y-2"
-              >
-                <div className="flex items-start gap-4 md:gap-6">
-                  <h1 className="text-[12vw] sm:text-[10vw] lg:text-[7.5vw] xl:text-[7vw] font-a font-black leading-[0.85] tracking-tight">
-                    {t.hero.overline}
-                  </h1>
-                  <motion.div 
-                    initial={{ opacity: 0, scale: 0.8, rotate: 0 }}
-                    animate={{ opacity: 1, scale: 1, rotate: -8 }}
-                    transition={{ delay: 0.3, duration: 0.8 }}
-                    className="relative mt-2 sm:mt-4 group cursor-pointer flex-shrink-0"
-                    whileHover={{ scale: 1.05, rotate: -12 }}
-                  >
-                    <div className="relative w-[18vw] sm:w-[15vw] lg:w-[10vw] aspect-[4/5] shadow-2xl">
-                      <Image
-                        src="/agency-team-working.jpg"
-                        alt="Team photo 1"
-                        fill
-                        className="object-cover"
-                      />
-                      <div className="absolute inset-0 border-[4px] sm:border-[6px] lg:border-8 border-white pointer-events-none" />
-                    </div>
-                  </motion.div>
-                </div>
-
-                <h1 className="text-[12vw] sm:text-[10vw] lg:text-[7.5vw] xl:text-[7vw] font-a font-black leading-[0.85] tracking-tight">
-                  {t.hero.title.earned}
-                </h1>
-
-                <div className="flex items-start gap-4 md:gap-6">
-                  <h1 className="text-[12vw] sm:text-[10vw] lg:text-[7.5vw] xl:text-[7vw] font-a font-black leading-[0.85] tracking-tight text-neutral-300">
-                    {t.hero.title.culture}
-                  </h1>
-                  <motion.div 
-                    initial={{ opacity: 0, scale: 0.8, rotate: 0 }}
-                    animate={{ opacity: 1, scale: 1, rotate: 6 }}
-                    transition={{ delay: 0.5, duration: 0.8 }}
-                    className="relative mt-1 sm:mt-2 group cursor-pointer flex-shrink-0"
-                    whileHover={{ scale: 1.05, rotate: 10 }}
-                  >
-                    <div className="relative w-[18vw] sm:w-[15vw] lg:w-[10vw] aspect-[4/5] shadow-2xl">
-                      <Image
-                        src="/agency-team-collaboration.jpg"
-                        alt="Team photo 2"
-                        fill
-                        className="object-cover"
-                      />
-                      <div className="absolute inset-0 border-[4px] sm:border-[6px] lg:border-8 border-white pointer-events-none" />
-                    </div>
-                  </motion.div>
-                </div>
-
-                <h1 className="text-[12vw] sm:text-[10vw] lg:text-[7.5vw] xl:text-[7vw] font-a font-black leading-[0.85] tracking-tight">
-                  {t.hero.title.agency}
-                </h1>
-              </motion.div>
-            </div>
-
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 1 }}
-              className="lg:col-span-4 flex flex-col justify-end pb-4"
-            >
-              <div className="mb-4 font-c text-[10px] uppercase tracking-widest opacity-30">
-                [ OVERVIEW_MNL_V2 ]
-              </div>
-              <p className="font-b text-sm sm:text-base lg:text-lg leading-relaxed mb-8 max-w-md">
-                {t.hero.subtitle}
-              </p>
-              <Link 
-                href="#what-we-do"
-                data-cursor-text="Explore"
-                className="group inline-flex items-center gap-3 text-xs sm:text-sm font-bold uppercase tracking-[0.2em] link-premium-arrow transition-opacity font-c"
-              >
-                {t.hero.cta}
-                <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
-              </Link>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      <section className="relative px-6 pb-32">
+      {/* 
+        RESTORED PREVIOUS SECTION 
+        Large Creative Image + Marquee
+      */}
+      <section ref={sectionRef} className="relative px-6 py-32 bg-white">
         <div className="container mx-auto max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 60 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 1, ease: customEase }}
             className="relative aspect-[16/10] rounded-3xl overflow-hidden"
           >
+            {/* Parallax Image */}
             <motion.div
-              style={{ y }}
-              className="absolute inset-0 scale-110 grayscale hover:grayscale-0 transition-all duration-1000"
+              style={{ y: bottomImageY }}
+              className="absolute inset-0 scale-[1.25] grayscale hover:grayscale-0 transition-all duration-1000"
             >
               <Image
                 src="/creative-workspace.png"
@@ -141,8 +173,8 @@ export function NewHero() {
               />
             </motion.div>
 
+            {/* Overlay Text */}
             <motion.div
-              style={{ y: useTransform(scrollYProgress, [0, 1], ["0%", "-50%"]), opacity }}
               className="absolute inset-0 flex items-center justify-center text-center p-8 z-10"
             >
               <div>
@@ -153,7 +185,7 @@ export function NewHero() {
                   transition={{ duration: 1 }}
                   className="text-4xl md:text-6xl lg:text-8xl font-a font-black text-white tracking-tighter leading-[0.9] drop-shadow-2xl"
                 >
-                  {t.hero.marquee}
+                  CRAFTING DIGITAL <br/> EXPERIENCES
                 </motion.h2>
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -181,6 +213,25 @@ export function NewHero() {
           </motion.div>
         </div>
       </section>
+
+      {/* Marquee Foot */}
+       <div className="border-t border-black/5 py-8 bg-neutral-50/50 overflow-hidden">
+        <div className="flex gap-8 whitespace-nowrap">
+           {[...Array(4)].map((_, i) => (
+             <motion.div 
+               key={i}
+               initial={{ x: "0%" }}
+               animate={{ x: "-100%" }}
+               transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+               className="flex gap-8 items-center flex-shrink-0"
+             >
+                <span className="text-4xl md:text-6xl font-black text-black/5 tracking-tighter">
+                   STRATEGY • DESIGN • CULTURE • GROWTH •
+                </span>
+             </motion.div>
+           ))}
+        </div>
+      </div>
     </div>
   )
 }

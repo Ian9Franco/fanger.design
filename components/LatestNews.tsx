@@ -30,8 +30,8 @@ export function LatestNews() {
               {lang === "en" ? "Latest News" : "Últimas Noticias"}
             </h2>
           </motion.div>
-          
-          <Link 
+
+          <Link
             href="/publications"
             className="hidden md:flex font-c text-[10px] uppercase tracking-widest font-bold link-premium-arrow pb-1"
           >
@@ -75,11 +75,11 @@ export function LatestNews() {
                   <span>•</span>
                   <span>{post.date}</span>
                 </div>
-                
+
                 <h3 className="text-2xl font-bold leading-tight group-hover:text-neutral-500 transition-colors">
                   {post.title}
                 </h3>
-                
+
                 <p className="font-c text-[9px] uppercase tracking-[0.2em] font-bold py-1 link-premium text-black">
                   Read Case Study
                 </p>
@@ -90,7 +90,7 @@ export function LatestNews() {
 
         {/* Mobile View All Link */}
         <div className="mt-16 md:hidden">
-          <Link 
+          <Link
             href="/publications"
             className="w-full justify-center flex font-mono text-xs uppercase tracking-widest font-bold bg-black text-white py-6 rounded-xl"
           >
